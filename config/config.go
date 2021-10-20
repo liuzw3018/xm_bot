@@ -16,7 +16,8 @@ import (
 
 type Config struct {
 	Server `yaml:"Server"`
-	TXBot  `yaml:"TXBot"`
+	TXBot  `yaml:"TxBot"`
+	CQHttp CQHttp `yaml:"CQHttp"`
 }
 
 type Server struct {
@@ -25,6 +26,11 @@ type Server struct {
 	SuperUsers []string `yaml:"SuperUsers"`
 	NickName   string   `yaml:"NickName"`
 	LocalProxy string   `yaml:"LocalProxy"`
+}
+
+type CQHttp struct {
+	Host string `yaml:"Host"`
+	Port int    `yaml:"Port"`
 }
 
 // mode=0&priv=0&restype=0
@@ -36,7 +42,7 @@ type TXBot struct {
 	TxResType int    `yaml:"TxResType"`
 }
 
-func LoadConfig() Config {
+func LoadConfig() *Config {
 	f, err := ioutil.ReadFile("./config_env.yaml")
 	if err != nil {
 		log.Panicf("读取配置文件错误：%s\n", err)
@@ -47,5 +53,5 @@ func LoadConfig() Config {
 	if err != nil {
 		log.Panicf("加载配置文件错误：%s\n", err)
 	}
-	return c
+	return &c
 }

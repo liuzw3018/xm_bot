@@ -46,12 +46,14 @@ func CmdPing(sendInfo global.SendMessage) {
 	// 实例化消息发送对象
 	b := utils.BotSendMessage{AutoEscape: true}
 	// 消息发送
-	b.Send(sendInfo.MessageType, sendInfo.GroupId, sendInfo.UserId, sendInfo.Message, "send_msg")
+	b.Send(sendInfo, "send_msg")
 }
 
 // newPing指令执行函数
 func NewCmdPing(sendInfo global.SendMessage) {
 	//time.Sleep(10 * time.Second)
+	sendInfo.Message = "[CQ:face,id=14]pong"
 	b := utils.BotSendMessage{AutoEscape: false}
-	b.Send(sendInfo.MessageType, sendInfo.GroupId, sendInfo.UserId, "[CQ:face,id=14]pong", "send_msg")
+	sendInfo.AtSender = true
+	b.Send(sendInfo, "send_msg")
 }

@@ -49,23 +49,29 @@ func TlBot(sendInfo global.SendMessage) {
 		err      error
 		bytes    []byte
 		data     tlBotResp
+		b        = utils.BotSendMessage{AutoEscape: true}
+		reply    interface{}
 	)
-
+	log.Println(tlUrl)
 	if resp, err = http.Get(tlUrl); err != nil {
-		log.Fatalln(err)
-		return
+		log.Println("get请求出错：", err)
+		sendInfo.Message = err
+		goto END
 	}
 	if bytes, err = ioutil.ReadAll(resp.Body); err != nil {
-		log.Fatalln(err)
-		return
+		log.Println("读取body错误：", err)
+		sendInfo.Message = err
+		goto END
 	}
 
 	if err = json.Unmarshal(bytes, &data); err != nil {
-		log.Fatalln(err)
-		return
+		log.Println("json反序列化错误：", err)
+		sendInfo.Message = err
+		goto END
 	}
 
-	reply := data.NewsList[0]["reply"]
-	b := utils.BotSendMessage{AutoEscape: true}
-	b.Send(sendInfo.MessageType, sendInfo.GroupId, sendInfo.UserId, reply, "send_msg")
+	reply = data.NewsList[0]["reply"]
+	sendInfo.Message = reply
+END:
+	b.Send(sendInfo, "send_msg")
 }

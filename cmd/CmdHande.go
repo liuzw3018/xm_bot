@@ -71,7 +71,6 @@ func (h *HandleCmd) runCommand(groupID, userID, rawMessage interface{}, oc globa
 	sendInfo := global.SendMessage{
 		UserId:      userID,
 		Message:     rawMessage.(string),
-		AtSender:    false,
 		MessageType: "private",
 	}
 	if groupID != nil {

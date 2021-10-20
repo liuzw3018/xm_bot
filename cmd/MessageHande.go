@@ -20,14 +20,10 @@ func MessageHandle(msg map[string]interface{}) {
 	case "message":
 		h := HandleCmd{}
 		//senderInfo := msg["sender"].(map[string]interface{})
-		rawMessage := msg["raw_message"]
-		userID := msg["user_id"]
-		groupID := msg["group_id"]
 		log.Printf("群聊 %v 接收到来自 %s 的消息：%s \n", msg["group_id"], msg["user_id"], msg["raw_message"])
 		//h.BotCmd(groupID, userID, rawMessage)
-		var atMe bool
-		atMe, rawMessage = CQMessageHandle(rawMessage)
-		h.BotCmd(groupID, userID, rawMessage, atMe)
+		atMe, rawMessage := CQMessageHandle(msg["raw_message"])
+		h.BotCmd(msg["group_id"], msg["user_id"], rawMessage, atMe)
 	}
 }
 

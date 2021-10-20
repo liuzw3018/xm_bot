@@ -14,7 +14,7 @@ import (
  */
 
 var (
-	GConfig = config.Config{}
+	GConfig = &config.Config{}
 )
 
 func init() {

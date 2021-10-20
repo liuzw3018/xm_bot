@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"strings"
+	"ximan/global"
 )
 
 /**
@@ -23,41 +24,62 @@ type BotSendMessage struct {
 	AutoEscape bool // 消息内容是否作为纯文本发送 ( 即不解析 CQ 码 ) , 只在 message 字段是字符串时有效
 }
 
-func (b *BotSendMessage) Send(messageType, groupID, userID, message interface{}, msgTag string) {
+func (b *BotSendMessage) Send(sendInfo global.SendMessage, msgTag string) {
 	switch msgTag {
 	case "send_private_msg":
-		b.SendPrivateMessage(userID, message)
+		b.SendPrivateMessage(sendInfo.UserId, sendInfo.Message, sendInfo.AtSender)
 	case "send_group_msg":
-		b.SendGroupMessage(groupID, message)
+		b.SendGroupMessage(sendInfo.GroupId, sendInfo.UserId, sendInfo.Message, sendInfo.AtSender)
 	case "send_msg":
-		b.SendMessage(messageType, groupID, userID, message)
+		b.SendMessage(sendInfo.MessageType, sendInfo.GroupId, sendInfo.UserId, sendInfo.Message, sendInfo.AtSender)
 	}
 }
 
-func (b *BotSendMessage) SendPrivateMessage(userID, message interface{}) {
+func (b *BotSendMessage) SendPrivateMessage(userId, message interface{}, atSender bool) {
 	var (
-		sendURL = fmt.Sprintf("http://127.0.0.1:5700/send_private_msg?user_id=%s&message=%s", userID, message)
+		sendURL string
 		data    = make(map[string]interface{})
+		newMsg  interface{}
 	)
+	if atSender {
+		newMsg = atMessageHandle(message, userId)
+	} else {
+		newMsg = message
+	}
+	sendURL = fmt.Sprintf("http://%s:%d/send_private_msg?user_id=%s&message=%s", global.GConfig.CQHttp.Host, global.GConfig.CQHttp.Port, userId, newMsg)
 	data = b.postData(sendURL)
 	b.checkSendStatus(data)
 
 }
 
-func (b *BotSendMessage) SendGroupMessage(groupID, message interface{}) {
+func (b *BotSendMessage) SendGroupMessage(groupId, userId, message interface{}, atSender bool) {
 	var (
-		sendURL = fmt.Sprintf("http://127.0.0.1:5700/send_group_msg?group_id=%s&auto_escape=%s&message=%s", groupID, b.AutoEscape, message)
+		sendURL string
 		data    = make(map[string]interface{})
+		newMsg  interface{}
 	)
+	if atSender {
+		newMsg = atMessageHandle(message, userId)
+	} else {
+		newMsg = message
+	}
+	sendURL = fmt.Sprintf("http://%s:%d/send_group_msg?group_id=%s&auto_escape=%v&message=%s", global.GConfig.CQHttp.Host, global.GConfig.CQHttp.Port, groupId, b.AutoEscape, newMsg)
 	data = b.postData(sendURL)
 	b.checkSendStatus(data)
 }
 
-func (b *BotSendMessage) SendMessage(messageType, groupID, userID, message interface{}) {
+func (b *BotSendMessage) SendMessage(messageType, groupId, userId, message interface{}, atSender bool) {
 	var (
-		sendURL = fmt.Sprintf("http://127.0.0.1:5700/send_msg?group_id=%s&auto_escape=%v&message=%s&message_type=%s&user_id=%s", groupID, b.AutoEscape, message, messageType, userID)
+		sendURL string
 		data    = make(map[string]interface{})
+		newMsg  interface{}
 	)
+	if atSender {
+		newMsg = atMessageHandle(message, userId)
+	} else {
+		newMsg = message
+	}
+	sendURL = fmt.Sprintf("http://%s:%d/send_msg?group_id=%s&auto_escape=%v&message=%s&message_type=%s&user_id=%s", global.GConfig.CQHttp.Host, global.GConfig.CQHttp.Port, groupId, b.AutoEscape, newMsg, messageType, userId)
 	data = b.postData(sendURL)
 	b.checkSendStatus(data)
 }
@@ -70,7 +92,7 @@ func (b *BotSendMessage) postData(sendURL string) (data map[string]interface{}) 
 	)
 	resp, err = http.Get(sendURL)
 	if err != nil {
-		log.Fatalln(err)
+		log.Println(err)
 		return nil
 	}
 	if bytes, err = ioutil.ReadAll(resp.Body); err != nil {
@@ -97,4 +119,8 @@ func (b *BotSendMessage) checkSendStatus(data map[string]interface{}) {
 
 func (b *BotSendMessage) saveMessageId(messageId interface{}) {
 
+}
+
+func atMessageHandle(message, userId interface{}) string {
+	return fmt.Sprintf("[CQ:at,qq=%s]%s", userId, message)
 }

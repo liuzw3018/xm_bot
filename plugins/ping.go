@@ -2,7 +2,7 @@ package plugins
 
 import (
 	"ximan/global"
-	"ximan/public/utils"
+	"ximan/utils"
 )
 
 /**

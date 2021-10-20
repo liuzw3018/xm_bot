@@ -7,7 +7,7 @@ import (
 	"log"
 	"net/http"
 	"ximan/global"
-	"ximan/public/utils"
+	"ximan/utils"
 )
 
 /**

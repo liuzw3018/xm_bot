@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 	"ximan/global"
-	"ximan/public/utils"
 	"ximan/server"
+	"ximan/utils"
 )
 
 /**

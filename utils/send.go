@@ -30,6 +30,7 @@ type BotSendMessage struct {
 // @param:        sendInfo global.SendMessage, msgTag string
 // @return:       nil
 func (b *BotSendMessage) Send(sendInfo global.SendMessage, msgTag string) {
+	// TODO 匹配消息 tag
 	switch msgTag {
 	case "send_private_msg":
 		b.SendPrivateMessage(sendInfo.UserId, sendInfo.Message, sendInfo.AtSender)
@@ -51,6 +52,7 @@ func (b *BotSendMessage) SendPrivateMessage(userId, message interface{}, atSende
 		data    = make(map[string]interface{})
 		newMsg  interface{}
 	)
+	// TODO 判断是否需要 at发送人
 	if atSender {
 		newMsg = atMessageHandle(message, userId)
 	} else {
@@ -73,6 +75,7 @@ func (b *BotSendMessage) SendGroupMessage(groupId, userId, message interface{}, 
 		data    = make(map[string]interface{})
 		newMsg  interface{}
 	)
+	// TODO 判断是否需要 at发送人
 	if atSender {
 		newMsg = atMessageHandle(message, userId)
 	} else {
@@ -94,6 +97,7 @@ func (b *BotSendMessage) SendMessage(messageType, groupId, userId, message inter
 		data    = make(map[string]interface{})
 		newMsg  interface{}
 	)
+	// TODO 判断是否需要 at发送人
 	if atSender {
 		newMsg = atMessageHandle(message, userId)
 	} else {

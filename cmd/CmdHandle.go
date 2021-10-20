@@ -34,6 +34,7 @@ type HandleCmd struct {
 // @param:        groupID, userID, rawMessage interface{}, atMe bool
 // @return:       nil
 func (h *HandleCmd) BotCmd(groupID, userID, rawMessage interface{}, atMe bool) {
+	// TODO 遍历插件列表匹配命令
 	for _, oc := range global.CmdSlice {
 		switch {
 		case rawMessage == oc.Cmd:
@@ -42,6 +43,7 @@ func (h *HandleCmd) BotCmd(groupID, userID, rawMessage interface{}, atMe bool) {
 				return
 			}
 		case rawMessage != "":
+			// TODO 遍历插件列表匹配命令别名
 			for _, aliasCmd := range oc.Aliases {
 				if rawMessage == aliasCmd {
 					h.atBotMessageHandle(groupID, userID, rawMessage, atMe, oc)
@@ -50,9 +52,14 @@ func (h *HandleCmd) BotCmd(groupID, userID, rawMessage interface{}, atMe bool) {
 					}
 				}
 			}
-			h.forMe(groupID, userID, rawMessage, atMe, oc)
+			// TODO ForMe类命令如果Block为true，则退出下面的匹配
+			if ok := h.forMe(groupID, userID, rawMessage, atMe, oc); ok {
+				return
+			}
 		case rawMessage == "":
-			h.forMe(groupID, userID, rawMessage, atMe, oc)
+			if ok := h.forMe(groupID, userID, rawMessage, atMe, oc); ok {
+				return
+			}
 		}
 
 	}
@@ -62,11 +69,16 @@ func (h *HandleCmd) BotCmd(groupID, userID, rawMessage interface{}, atMe bool) {
 // @description:  处理无法匹配的命令
 // @auth:         liuzw3018
 // @param:        groupID, userID, rawMessage interface{}, atMe bool, oc global.OnCommand
-// @return:       nil
-func (h *HandleCmd) forMe(groupID, userID, rawMessage interface{}, atMe bool, oc global.OnCommand) {
+// @return:       bool
+func (h *HandleCmd) forMe(groupID, userID, rawMessage interface{}, atMe bool, oc global.OnCommand) bool {
+	// TODO 如果命令可以接收所有信息则执行
 	if oc.ForMe {
 		h.atBotMessageHandle(groupID, userID, rawMessage, atMe, oc)
+		if oc.Block {
+			return true
+		}
 	}
+	return false
 }
 
 // @title:    	  atBotMessageHandle
@@ -76,6 +88,7 @@ func (h *HandleCmd) forMe(groupID, userID, rawMessage interface{}, atMe bool, oc
 // @return:       nil
 func (h *HandleCmd) atBotMessageHandle(groupID, userID, rawMessage interface{}, atMe bool, oc global.OnCommand) {
 	//fmt.Println(oc)
+	// TODO 匹配消息响应方式
 	switch {
 	case atMe: // at机器人，无论如何都要执行
 		h.runCommand(groupID, userID, rawMessage, oc)
@@ -99,6 +112,7 @@ func (h *HandleCmd) runCommand(groupID, userID, rawMessage interface{}, oc globa
 		Message:     rawMessage.(string),
 		MessageType: "private",
 	}
+	// TODO 如果含有群聊信息，则添加群聊相关字段
 	if groupID != nil {
 		sendInfo.IsGroup = true
 		sendInfo.GroupId = groupID

@@ -22,6 +22,7 @@ import (
 // @param:        msg map[string]interface{}
 // @return:       nil
 func MessageHandle(msg map[string]interface{}) {
+	// TODO 匹配消息类型
 	switch msg["post_type"] {
 	case "meta_event":
 		logMsg := fmt.Sprintf("gocqhttp心跳检测：%s", msg["meta_event_type"])
@@ -46,9 +47,11 @@ func cqMessageHandle(message, selfId interface{}) (bool, string) {
 	var atMe bool
 	msg := message.(string)
 	var returnMsg string
+	// TODO 如果消息中含有 CQ字符，需要分割消息，否则去匹配 nickname
 	if strings.Contains(msg, "CQ") {
 		temp := strings.Split(msg, " ")
 		//log.Println(temp[0])
+		// TODO 分割消息之后切片长度为 1，消息中只含有 CQ码消息，判断消息是否为 at机器人
 		if len(temp) == 1 {
 			returnMsg = " "
 			atMe = cqAtMe(selfId, msg, atMe)
@@ -57,6 +60,7 @@ func cqMessageHandle(message, selfId interface{}) (bool, string) {
 			atMe = cqAtMe(selfId, msg, atMe)
 		}
 	} else {
+		// TODO 匹配nickname
 		atMe, returnMsg = atMeMessageHandle(msg)
 	}
 	return atMe, returnMsg
@@ -69,6 +73,7 @@ func cqMessageHandle(message, selfId interface{}) (bool, string) {
 // @return:       bool
 func cqAtMe(selfId interface{}, msg string, atMe bool) bool {
 	me := fmt.Sprintf("%s", selfId)
+	// TODO CQ码中含有 at字符并且含有自己的 QQ号，返回 true
 	if strings.Contains(msg, "at") && strings.Contains(msg, me) {
 		atMe = true
 	}
@@ -83,6 +88,7 @@ func cqAtMe(selfId interface{}, msg string, atMe bool) bool {
 func atMeMessageHandle(returnMsg string) (bool, string) {
 	var atMe bool
 	var reNickName string
+	// TODO nickname 添加到正则表达式中
 	for index, nickName := range global.GConfig.NickName {
 		if index == 0 {
 			reNickName = fmt.Sprintf("^%s", nickName)
@@ -91,6 +97,7 @@ func atMeMessageHandle(returnMsg string) (bool, string) {
 		}
 	}
 	matched, _ := regexp.Compile(reNickName)
+	// TODO 消息中含有 nickname，截取消息并返回
 	if matched.MatchString(returnMsg) {
 		atMe = true
 		msgLength := len(matched.FindString(returnMsg))

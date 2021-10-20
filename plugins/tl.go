@@ -52,7 +52,6 @@ func TlBot(sendInfo global.SendMessage) {
 		b        = utils.BotSendMessage{AutoEscape: true}
 		reply    interface{}
 	)
-	log.Println(tlUrl)
 	if resp, err = http.Get(tlUrl); err != nil {
 		log.Println("get请求出错：", err)
 		sendInfo.Message = err

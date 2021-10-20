@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"log"
+	"regexp"
 	"strings"
 	"ximan/global"
 )
@@ -26,12 +27,13 @@ func MessageHandle(msg map[string]interface{}) {
 		logMsg := fmt.Sprintf("群聊 %v 接收到来自 %s 的消息：%s", msg["group_id"], msg["user_id"], msg["raw_message"])
 		log.Printf(logMsg)
 		global.BotInfoLogMsgChan <- logMsg
-		atMe, rawMessage := CQMessageHandle(msg["raw_message"])
+		atMe, rawMessage := cqMessageHandle(msg["raw_message"], msg["self_id"])
 		h.BotCmd(msg["group_id"], msg["user_id"], rawMessage, atMe)
 	}
 }
 
-func CQMessageHandle(message interface{}) (bool, string) {
+func cqMessageHandle(message, selfId interface{}) (bool, string) {
+	var atMe bool
 	msg := message.(string)
 	var returnMsg string
 	if strings.Contains(msg, "CQ") {
@@ -39,12 +41,41 @@ func CQMessageHandle(message interface{}) (bool, string) {
 		//log.Println(temp[0])
 		if len(temp) == 1 {
 			returnMsg = " "
+			atMe = cqAtMe(selfId, msg, atMe)
 		} else {
 			returnMsg = temp[len(temp)-1]
+			atMe = cqAtMe(selfId, msg, atMe)
 		}
 	} else {
-		returnMsg = msg
+		atMe, returnMsg = atMeMessageHandle(msg)
+	}
+	return atMe, returnMsg
+}
+
+func cqAtMe(selfId interface{}, msg string, atMe bool) bool {
+	me := fmt.Sprintf("%s", selfId)
+	if strings.Contains(msg, "at") && strings.Contains(msg, me) {
+		atMe = true
+	}
+	return atMe
+}
+
+func atMeMessageHandle(returnMsg string) (bool, string) {
+	var atMe bool
+	var reNickName string
+	for index, nickName := range global.GConfig.NickName {
+		if index == 0 {
+			reNickName = fmt.Sprintf("^%s", nickName)
+		} else {
+			reNickName = fmt.Sprintf("%s|%s", reNickName, nickName)
+		}
+	}
+	matched, _ := regexp.Compile(reNickName)
+	if matched.MatchString(returnMsg) {
+		atMe = true
+		msgLength := len(matched.FindString(returnMsg))
+		returnMsg = returnMsg[msgLength:]
 	}
 
-	return strings.Contains(msg, "at") && strings.Contains(msg, "535778382"), returnMsg
+	return atMe, returnMsg
 }

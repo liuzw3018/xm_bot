@@ -24,7 +24,7 @@ type Server struct {
 	Host       string   `yaml:"Host"`
 	Port       int      `yaml:"Port"`
 	SuperUsers []string `yaml:"SuperUsers"`
-	NickName   string   `yaml:"NickName"`
+	NickName   []string `yaml:"NickName"`
 	LocalProxy string   `yaml:"LocalProxy"`
 	LogPath    string   `yaml:"LogPath"`
 }

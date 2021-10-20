@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strings"
 	"ximan/global"
 	"ximan/utils"
 )
@@ -50,20 +51,20 @@ func TlBot(sendInfo global.SendMessage) {
 		bytes    []byte
 		data     tlBotResp
 		b        = utils.BotSendMessage{AutoEscape: true}
-		reply    interface{}
+		reply    string
 	)
 	if resp, err = http.Get(tlUrl); err != nil {
 		err = fmt.Errorf("get请求出错：%s", err)
 		log.Println(err)
 		global.ErrorLogMsgChan <- err.Error()
-		sendInfo.Message = err
+		sendInfo.Message = err.Error()
 		goto END
 	}
 	if bytes, err = ioutil.ReadAll(resp.Body); err != nil {
 		err = fmt.Errorf("读取body出错：%s", err)
 		log.Println(err)
 		global.ErrorLogMsgChan <- err.Error()
-		sendInfo.Message = err
+		sendInfo.Message = err.Error()
 		goto END
 	}
 
@@ -71,11 +72,13 @@ func TlBot(sendInfo global.SendMessage) {
 		err = fmt.Errorf("json反序列化出错：%s", err)
 		log.Println(err)
 		global.ErrorLogMsgChan <- err.Error()
-		sendInfo.Message = err
+		sendInfo.Message = err.Error()
 		goto END
 	}
 
-	reply = data.NewsList[0]["reply"]
+	reply = data.NewsList[0]["reply"].(string)
+	reply = strings.Replace(reply, "\n", "", -1)
+	reply = strings.Replace(reply, "\r", "", -1)
 	sendInfo.Message = reply
 END:
 	b.Send(sendInfo, "send_msg")

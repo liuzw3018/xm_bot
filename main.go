@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"ximan/global"
+	"ximan/public/utils"
 	"ximan/server"
 )
 
@@ -16,6 +17,9 @@ import (
 
 func main() {
 	app := server.RunServer()
+
+	go utils.ErrorLogMsg()
+	go utils.XmInfoLog()
 
 	addr := fmt.Sprintf("%s:%d", global.GConfig.Host, global.GConfig.Port)
 	err := app.Run(addr)

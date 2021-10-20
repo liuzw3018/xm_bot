@@ -1,8 +1,10 @@
 package cmd
 
 import (
+	"fmt"
 	"log"
 	"strings"
+	"ximan/global"
 )
 
 /**
@@ -16,12 +18,14 @@ import (
 func MessageHandle(msg map[string]interface{}) {
 	switch msg["post_type"] {
 	case "meta_event":
-		log.Printf("gocqhttp心跳检测：%s\n", msg["meta_event_type"])
+		logMsg := fmt.Sprintf("gocqhttp心跳检测：%s", msg["meta_event_type"])
+		log.Println(logMsg)
 	case "message":
 		h := HandleCmd{}
 		//senderInfo := msg["sender"].(map[string]interface{})
-		log.Printf("群聊 %v 接收到来自 %s 的消息：%s \n", msg["group_id"], msg["user_id"], msg["raw_message"])
-		//h.BotCmd(groupID, userID, rawMessage)
+		logMsg := fmt.Sprintf("群聊 %v 接收到来自 %s 的消息：%s", msg["group_id"], msg["user_id"], msg["raw_message"])
+		log.Printf(logMsg)
+		global.BotInfoLogMsgChan <- logMsg
 		atMe, rawMessage := CQMessageHandle(msg["raw_message"])
 		h.BotCmd(msg["group_id"], msg["user_id"], rawMessage, atMe)
 	}

@@ -26,6 +26,7 @@ type Server struct {
 	SuperUsers []string `yaml:"SuperUsers"`
 	NickName   string   `yaml:"NickName"`
 	LocalProxy string   `yaml:"LocalProxy"`
+	LogPath    string   `yaml:"LogPath"`
 }
 
 type CQHttp struct {

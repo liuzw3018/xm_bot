@@ -19,5 +19,6 @@ var (
 
 func init() {
 	log.Println("加载配置文件...")
+	BotInfoLogMsgChan <- "加载配置文件..."
 	GConfig = config.LoadConfig()
 }

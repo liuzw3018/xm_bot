@@ -92,18 +92,24 @@ func (b *BotSendMessage) postData(sendURL string) (data map[string]interface{}) 
 	)
 	resp, err = http.Get(sendURL)
 	if err != nil {
+		err = fmt.Errorf("get请求出错：%s", err)
 		log.Println(err)
+		global.ErrorLogMsgChan <- err.Error()
 		return nil
 	}
 	if bytes, err = ioutil.ReadAll(resp.Body); err != nil {
+		err = fmt.Errorf("读取body出错：%s", err)
 		log.Println(err)
+		global.ErrorLogMsgChan <- err.Error()
 		return nil
 	}
 	decode := json.NewDecoder(strings.NewReader(string(bytes)))
 	decode.UseNumber()
 	err = decode.Decode(&data)
 	if err != nil {
+		err = fmt.Errorf("json反序列化出错：%s", err)
 		log.Println(err)
+		global.ErrorLogMsgChan <- err.Error()
 		return nil
 	}
 	return data

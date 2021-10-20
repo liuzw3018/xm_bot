@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"io/ioutil"
-	"log"
 	"strings"
 	"ximan/cmd"
+	"ximan/global"
 )
 
 /**
@@ -25,7 +25,7 @@ func BotReceiveMessageBase(c *gin.Context) {
 		msg    = make(map[string]interface{})
 	)
 	if res, err = ioutil.ReadAll(c.Request.Body); err != nil {
-		log.Fatalln(err)
+		global.ErrorLogMsgChan <- err.Error()
 		return
 	}
 
@@ -33,7 +33,7 @@ func BotReceiveMessageBase(c *gin.Context) {
 	decode.UseNumber()
 
 	if err = decode.Decode(&msg); err != nil {
-		log.Fatalln(err)
+		global.ErrorLogMsgChan <- err.Error()
 		return
 	}
 

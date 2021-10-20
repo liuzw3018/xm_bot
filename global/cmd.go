@@ -1,6 +1,9 @@
 package global
 
-import "log"
+import (
+	"fmt"
+	"log"
+)
 
 /**
  * @Author: liu zw
@@ -24,6 +27,8 @@ type OnCommand struct {
 
 // 注册插件
 func (c OnCommand) Registered() {
-	log.Printf("加载模块 %s \n", c.ModuleName)
+	logMsg := fmt.Sprintf("加载模块 %s", c.ModuleName)
+	log.Println(logMsg)
+	BotInfoLogMsgChan <- logMsg
 	CmdSlice = append(CmdSlice, c)
 }

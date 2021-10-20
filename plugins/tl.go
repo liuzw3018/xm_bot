@@ -53,18 +53,24 @@ func TlBot(sendInfo global.SendMessage) {
 		reply    interface{}
 	)
 	if resp, err = http.Get(tlUrl); err != nil {
-		log.Println("get请求出错：", err)
+		err = fmt.Errorf("get请求出错：%s", err)
+		log.Println(err)
+		global.ErrorLogMsgChan <- err.Error()
 		sendInfo.Message = err
 		goto END
 	}
 	if bytes, err = ioutil.ReadAll(resp.Body); err != nil {
-		log.Println("读取body错误：", err)
+		err = fmt.Errorf("读取body出错：%s", err)
+		log.Println(err)
+		global.ErrorLogMsgChan <- err.Error()
 		sendInfo.Message = err
 		goto END
 	}
 
 	if err = json.Unmarshal(bytes, &data); err != nil {
-		log.Println("json反序列化错误：", err)
+		err = fmt.Errorf("json反序列化出错：%s", err)
+		log.Println(err)
+		global.ErrorLogMsgChan <- err.Error()
 		sendInfo.Message = err
 		goto END
 	}

@@ -1,6 +1,9 @@
 package plugins
 
-import "log"
+import (
+	"log"
+	"ximan/global"
+)
 
 /**
  * @Author: liu zw
@@ -12,4 +15,5 @@ import "log"
 
 func LoadPlugin() {
 	log.Println("模块加载完成！")
+	global.BotInfoLogMsgChan <- "模块加载完成！"
 }

@@ -5,6 +5,7 @@ Server:
     - ""
   NickName: ""
   LocalProxy: ""
+  LogPath: "./log/"
 TxBot:
   TxBotKey: ""
   TxBotUrl: ""

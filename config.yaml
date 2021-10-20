@@ -1,0 +1,13 @@
+Server:
+  Host: "127.0.0.1"
+  Port: 5701
+  SuperUsers:
+    - ""
+  NickName: ""
+  LocalProxy: ""
+TxBot:
+  TxBotKey: ""
+  TxBotUrl: ""
+  TxMod: 0
+  TxPriv: 0
+  TxResType: 0

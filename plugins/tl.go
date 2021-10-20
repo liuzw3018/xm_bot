@@ -44,8 +44,7 @@ func TlBot(sendInfo global.SendMessage) {
 	var (
 		question = sendInfo.Message
 		userId   = sendInfo.UserId
-		key      = "470d505ba2e5dfe67a247ed8cd3e8e9f"
-		tlUrl    = fmt.Sprintf("http://api.tianapi.com/txapi/robot/index?key=%s&question=%s&uniqueid=%s&mode=0&priv=0&restype=0", key, question, userId)
+		tlUrl    = fmt.Sprintf("%s?key=%s&question=%s&uniqueid=%s&mode=0&priv=0&restype=0", global.GConfig.TxBotUrl, global.GConfig.TxBotKey, question, userId)
 		resp     *http.Response
 		err      error
 		bytes    []byte

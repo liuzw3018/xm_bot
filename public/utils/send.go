@@ -40,11 +40,7 @@ func (b *BotSendMessage) SendPrivateMessage(userID, message interface{}) {
 		data    = make(map[string]interface{})
 	)
 	data = b.postData(sendURL)
-	if data["status"] == "ok" {
-		log.Println("发送成功:", data)
-	} else {
-		log.Println(data)
-	}
+	b.checkSendStatus(data)
 
 }
 
@@ -54,12 +50,7 @@ func (b *BotSendMessage) SendGroupMessage(groupID, message interface{}) {
 		data    = make(map[string]interface{})
 	)
 	data = b.postData(sendURL)
-	if data["status"] == "ok" {
-		log.Println("发送成功:", data)
-	} else {
-		log.Println(data)
-	}
-
+	b.checkSendStatus(data)
 }
 
 func (b *BotSendMessage) SendMessage(messageType, groupID, userID, message interface{}) {
@@ -68,11 +59,7 @@ func (b *BotSendMessage) SendMessage(messageType, groupID, userID, message inter
 		data    = make(map[string]interface{})
 	)
 	data = b.postData(sendURL)
-	if data["status"] == "ok" {
-		log.Println("发送成功:", data)
-	} else {
-		log.Println(data)
-	}
+	b.checkSendStatus(data)
 }
 
 func (b *BotSendMessage) postData(sendURL string) (data map[string]interface{}) {
@@ -98,6 +85,14 @@ func (b *BotSendMessage) postData(sendURL string) (data map[string]interface{}) 
 		return nil
 	}
 	return data
+}
+
+func (b *BotSendMessage) checkSendStatus(data map[string]interface{}) {
+	if data["status"] == "ok" {
+		log.Println("发送成功:", data)
+	} else {
+		log.Println(data)
+	}
 }
 
 func (b *BotSendMessage) saveMessageId(messageId interface{}) {

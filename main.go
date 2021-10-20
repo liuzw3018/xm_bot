@@ -1,6 +1,10 @@
 package main
 
-import "ximan/server"
+import (
+	"fmt"
+	"ximan/global"
+	"ximan/server"
+)
 
 /**
  * @Author: liu zw
@@ -13,7 +17,8 @@ import "ximan/server"
 func main() {
 	app := server.RunServer()
 
-	err := app.Run(":5701")
+	addr := fmt.Sprintf("%s:%d", global.GConfig.Host, global.GConfig.Port)
+	err := app.Run(addr)
 	if err != nil {
 		panic(err)
 	}

@@ -11,7 +11,7 @@ import "log"
  */
 
 type OnCommand struct {
-	CmdName     string
+	ModuleName  string
 	Cmd         string   // 命令
 	Alias       []string // 命令别名
 	Priority    uint
@@ -24,6 +24,6 @@ type OnCommand struct {
 
 // 注册插件
 func (c OnCommand) Registered() {
-	log.Printf("加载模块 %s \n", c.CmdName)
+	log.Printf("加载模块 %s \n", c.ModuleName)
 	CmdSlice = append(CmdSlice, c)
 }

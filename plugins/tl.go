@@ -19,7 +19,7 @@ import (
  */
 
 var tl = global.OnCommand{
-	CmdName:     "天行机器人",
+	ModuleName:  "天行机器人",
 	Cmd:         "",
 	Alias:       nil,
 	AtMe:        true,

@@ -15,7 +15,7 @@ import (
 
 // 创建指令实例
 var ping = global.OnCommand{
-	CmdName:     "ping",
+	ModuleName:  "ping",
 	Cmd:         "ping",
 	Alias:       []string{"test"},
 	Priority:    1,
@@ -25,7 +25,7 @@ var ping = global.OnCommand{
 	Block:       true,
 }
 var newPing = global.OnCommand{
-	CmdName:     "ping1",
+	ModuleName:  "ping1",
 	Cmd:         "ping1",
 	Alias:       []string{"test1"},
 	Priority:    1,

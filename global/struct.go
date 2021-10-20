@@ -4,10 +4,11 @@ package global
  * @Author: liu zw
  * @Date: 2021/10/18 16:52
  * @File:
- * @Description: //TODO $
+ * @Description: 全局所需的结构体定义
  * @Version:
  */
 
+// SendMessage 发送消息对象
 type SendMessage struct {
 	UserId      interface{} // 对方 QQ 号 ( 消息类型为 private 时需要 )
 	GroupId     interface{} // 群号 ( 消息类型为 group 时需要 )

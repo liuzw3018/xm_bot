@@ -10,16 +10,18 @@ import (
  * @Author: liu zw
  * @Date: 2021/10/20 9:08
  * @File:
- * @Description: //TODO $
+ * @Description: 机器人配置信息加载
  * @Version:
  */
 
+// Config 机器人配置信息
 type Config struct {
 	Server `yaml:"Server"`
 	TXBot  `yaml:"TxBot"`
 	CQHttp CQHttp `yaml:"CQHttp"`
 }
 
+// Server 机器人服务器配置
 type Server struct {
 	Host       string   `yaml:"Host"`
 	Port       int      `yaml:"Port"`
@@ -29,12 +31,13 @@ type Server struct {
 	LogPath    string   `yaml:"LogPath"`
 }
 
+// CQHttp CQHttp服务器配置
 type CQHttp struct {
 	Host string `yaml:"Host"`
 	Port int    `yaml:"Port"`
 }
 
-// mode=0&priv=0&restype=0
+// TXBot 天行机器人配置，可不使用
 type TXBot struct {
 	TxBotKey  string `yaml:"TxBotKey"`
 	TxBotUrl  string `yaml:"TxBotUrl"`
@@ -43,6 +46,11 @@ type TXBot struct {
 	TxResType int    `yaml:"TxResType"`
 }
 
+// @title:    	  LoadConfig
+// @description:  加载配置
+// @auth:         liuzw3018
+// @param:        nil
+// @return:       *global.GConfig
 func LoadConfig() *Config {
 	f, err := ioutil.ReadFile("./config_env.yaml")
 	if err != nil {

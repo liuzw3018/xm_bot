@@ -17,7 +17,7 @@ import (
 var ping = global.OnCommand{
 	ModuleName:  "ping",
 	Cmd:         "ping",
-	Alias:       []string{"test"},
+	Aliases:     []string{"test"},
 	Priority:    1,
 	AtMe:        false,
 	CmdFunc:     CmdPing,
@@ -27,7 +27,7 @@ var ping = global.OnCommand{
 var newPing = global.OnCommand{
 	ModuleName:  "ping1",
 	Cmd:         "ping1",
-	Alias:       []string{"test1"},
+	Aliases:     []string{"test1"},
 	Priority:    1,
 	AtMe:        true,
 	CmdFunc:     NewCmdPing,

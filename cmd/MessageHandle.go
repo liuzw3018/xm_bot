@@ -12,10 +12,15 @@ import (
  * @Author: liu zw
  * @Date: 2021/10/18 16:43
  * @File:
- * @Description: //TODO $
+ * @Description: 对从api接收到的消息进行预处理
  * @Version:
  */
 
+// @title:    	  MessageHandle
+// @description:  对从api接收到的消息进行预处理
+// @auth:         liuzw3018
+// @param:        msg map[string]interface{}
+// @return:       nil
 func MessageHandle(msg map[string]interface{}) {
 	switch msg["post_type"] {
 	case "meta_event":
@@ -32,6 +37,11 @@ func MessageHandle(msg map[string]interface{}) {
 	}
 }
 
+// @title:    	  cqMessageHandle
+// @description:  处理消息中包含的CQ码信息，并判断是否at了机器人
+// @auth:         liuzw3018
+// @param:        message, selfId interface{}
+// @return:       bool, string
 func cqMessageHandle(message, selfId interface{}) (bool, string) {
 	var atMe bool
 	msg := message.(string)
@@ -52,6 +62,11 @@ func cqMessageHandle(message, selfId interface{}) (bool, string) {
 	return atMe, returnMsg
 }
 
+// @title:    	  cqAtMe
+// @description:  判断消息中包含的CQ码是否为at机器人
+// @auth:         liuzw3018
+// @param:        selfId interface{}, msg string, atMe bool
+// @return:       bool
 func cqAtMe(selfId interface{}, msg string, atMe bool) bool {
 	me := fmt.Sprintf("%s", selfId)
 	if strings.Contains(msg, "at") && strings.Contains(msg, me) {
@@ -60,6 +75,11 @@ func cqAtMe(selfId interface{}, msg string, atMe bool) bool {
 	return atMe
 }
 
+// @title:    	  atMeMessageHandle
+// @description:  响应消息中机器人的nickname，判定为at机器人
+// @auth:         liuzw3018
+// @param:        returnMsg string
+// @return:       bool, string
 func atMeMessageHandle(returnMsg string) (bool, string) {
 	var atMe bool
 	var reNickName string

@@ -14,16 +14,21 @@ import (
  * @Author: liu zw
  * @Date: 2021/10/18 15:31
  * @File:
- * @Description: //TODO $
+ * @Description: 消息发送
  * @Version:
  */
 
 //var messageIdSlice []interface{}
-
+// BotSendMessage 机器人消息发送方法
 type BotSendMessage struct {
 	AutoEscape bool // 消息内容是否作为纯文本发送 ( 即不解析 CQ 码 ) , 只在 message 字段是字符串时有效
 }
 
+// @title:    	  Send
+// @description:  发送消息，并根据tag判断发送消息的类型
+// @auth:         liuzw3018
+// @param:        sendInfo global.SendMessage, msgTag string
+// @return:       nil
 func (b *BotSendMessage) Send(sendInfo global.SendMessage, msgTag string) {
 	switch msgTag {
 	case "send_private_msg":
@@ -35,6 +40,11 @@ func (b *BotSendMessage) Send(sendInfo global.SendMessage, msgTag string) {
 	}
 }
 
+// @title:    	  SendPrivateMessage
+// @description:  发送私聊消息
+// @auth:         liuzw3018
+// @param:        userId, message interface{}, atSender bool
+// @return:       nil
 func (b *BotSendMessage) SendPrivateMessage(userId, message interface{}, atSender bool) {
 	var (
 		sendURL string
@@ -52,6 +62,11 @@ func (b *BotSendMessage) SendPrivateMessage(userId, message interface{}, atSende
 
 }
 
+// @title:    	  SendGroupMessage
+// @description:  发送群聊消息
+// @auth:         liuzw3018
+// @param:        userId, message interface{}, atSender bool
+// @return:       nil
 func (b *BotSendMessage) SendGroupMessage(groupId, userId, message interface{}, atSender bool) {
 	var (
 		sendURL string
@@ -68,6 +83,11 @@ func (b *BotSendMessage) SendGroupMessage(groupId, userId, message interface{}, 
 	b.checkSendStatus(data)
 }
 
+// @title:    	  SendMessage
+// @description:  发送消息，messageType判断发送私聊消息还是群聊消息
+// @auth:         liuzw3018
+// @param:        messageType, groupId, userId, message interface{}, atSender bool
+// @return:       nil
 func (b *BotSendMessage) SendMessage(messageType, groupId, userId, message interface{}, atSender bool) {
 	var (
 		sendURL string
@@ -84,6 +104,11 @@ func (b *BotSendMessage) SendMessage(messageType, groupId, userId, message inter
 	b.checkSendStatus(data)
 }
 
+// @title:    	  postData
+// @description:  推送消息到CQHttp发送
+// @auth:         liuzw3018
+// @param:        sendURL string
+// @return:       data map[string]interface{}
 func (b *BotSendMessage) postData(sendURL string) (data map[string]interface{}) {
 	var (
 		resp  *http.Response
@@ -115,18 +140,33 @@ func (b *BotSendMessage) postData(sendURL string) (data map[string]interface{}) 
 	return data
 }
 
+// @title:    	  checkSendStatus
+// @description:  检查消息发送状态
+// @auth:         liuzw3018
+// @param:        data map[string]interface{}
+// @return:       nil
 func (b *BotSendMessage) checkSendStatus(data map[string]interface{}) {
 	if data["status"] == "ok" {
 		log.Println("发送成功:", data)
 	} else {
-		log.Println(data)
+		log.Println("消息发送失败：", data)
 	}
 }
 
+// @title:    	  saveMessageId
+// @description:  保存上一次发送的消息ID(未完成)
+// @auth:         liuzw3018
+// @param:        nil
+// @return:       nil
 func (b *BotSendMessage) saveMessageId(messageId interface{}) {
 
 }
 
+// @title:    	  atMessageHandle
+// @description:  添加at发送人消息头
+// @auth:         liuzw3018
+// @param:        message, userId interface{}
+// @return:       string
 func atMessageHandle(message, userId interface{}) string {
 	return fmt.Sprintf("[CQ:at,qq=%s]%s", userId, message)
 }

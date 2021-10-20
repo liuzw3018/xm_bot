@@ -11,21 +11,24 @@ import (
  * @Author: liu zw
  * @Date: 2021/10/20 11:21
  * @File:
- * @Description: //TODO $
+ * @Description: 日志文件处理
  * @Version:
  */
 
 const (
-	FORMAT = "20060102"
-	//LineFeed 换行
-	LineFeed = "\r\n"
+	FORMAT   = "20060102" // 日期格式
+	LineFeed = "\r\n"     //LineFeed 换行
 )
 
 var (
-	LogPath = global.GConfig.LogPath
+	LogPath = global.GConfig.LogPath // 日志文件保存路径
 )
 
-//WriteLog return error
+// @title:    	  WriteLog
+// @description:  将日志写入文件
+// @auth:         liuzw3018
+// @param:        fileName, msg string
+// @return:       error
 func WriteLog(fileName, msg string) error {
 	//以天为基准,存日志
 	var path = LogPath + time.Now().Format(FORMAT) + "/"
@@ -47,7 +50,11 @@ func WriteLog(fileName, msg string) error {
 	return err
 }
 
-//CreateDir  文件夹创建
+// @title:    	  CreateDir
+// @description:  创建日志文件夹
+// @auth:         liuzw3018
+// @param:        path string
+// @return:       error
 func CreateDir(path string) error {
 	err := os.MkdirAll(path, os.ModePerm)
 	if err != nil {
@@ -57,7 +64,11 @@ func CreateDir(path string) error {
 	return nil
 }
 
-//IsExist  判断文件夹/文件是否存在  存在返回 true
+// @title:    	  IsExist
+// @description:  判断文件是否存在
+// @auth:         liuzw3018
+// @param:        f string
+// @return:       bool
 func IsExist(f string) bool {
 	_, err := os.Stat(f)
 	return err == nil || os.IsExist(err)

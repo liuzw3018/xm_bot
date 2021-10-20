@@ -4,11 +4,13 @@ package global
  * @Author: liu zw
  * @Date: 2021/10/19 11:26
  * @File:
- * @Description: //TODO $
+ * @Description: 全局所需的切片定义
  * @Version:
  */
+// CmdSlice 插件列表
 var CmdSlice = CmdSlices{}
 
+// CmdSlices 插件列表，可根据优先级排序
 type CmdSlices []OnCommand
 
 func (cs CmdSlices) Len() int {

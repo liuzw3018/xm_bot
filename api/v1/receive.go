@@ -13,10 +13,15 @@ import (
  * @Author: liu zw
  * @Date: 2021/10/18 15:27
  * @File:
- * @Description: //TODO $
+ * @Description: 处理CQHttp的消息
  * @Version:
  */
 
+// @title:    	  BotReceiveMessageBase
+// @description:  接收CQHttp推送的消息
+// @auth:         liuzw3018
+// @param:        nil
+// @return:       nil
 func BotReceiveMessageBase(c *gin.Context) {
 	var (
 		res    []byte

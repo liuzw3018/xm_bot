@@ -23,7 +23,7 @@ func RunServer() *gin.Engine {
 	app := gin.New()
 	app.Use(gin.Recovery())
 
-	app.POST("/gocqhttp", v1.BotReceiveMessageBase)
+	app.POST("/gocqhttp", v1.BotReceiveEventBase)
 
 	return app
 }

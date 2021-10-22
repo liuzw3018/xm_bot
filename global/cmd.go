@@ -13,16 +13,16 @@ import (
  * @Version:
  */
 
-// OnCommand 命令结构体，实现了用户插件命令
+// OnCommand 事件结构体
 type OnCommand struct {
 	ModuleName  string                     // 插件名称
-	Cmd         string                     // 命令
-	Aliases     []string                   // 命令别名
+	Cmd         string                     // 事件名称
+	Aliases     []string                   // 事件别名
 	Priority    uint                       // 优先级
-	CmdFunc     func(sendInfo SendMessage) // 命令执行函数
+	CmdFunc     func(sendInfo SendMessage) // 事件执行函数
 	AtMe        bool                       // 是否at机器人
 	ForMe       bool                       // 是否回应所有的消息
-	Block       bool                       // 是否继续执行下一个命令
+	Block       bool                       // 是否继续匹配下一个事件
 	Permissions []string                   // 超级用户
 }
 

@@ -3,7 +3,8 @@ Server:
   Port: 5701
   SuperUsers:
     - ""
-  NickName: ""
+  NickName:
+    - ""
   LocalProxy: ""
   LogPath: "./log/"
 TxBot:

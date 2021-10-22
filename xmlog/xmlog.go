@@ -42,7 +42,7 @@ func WriteLog(fileName, msg string) error {
 	)
 
 	f, err = os.OpenFile(path+fileName, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
-	_, err = io.WriteString(f, LineFeed+msg)
+	_, err = io.WriteString(f, msg+LineFeed)
 
 	defer func() {
 		_ = f.Close()

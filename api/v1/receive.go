@@ -5,8 +5,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"io/ioutil"
 	"strings"
-	"ximan/cmd"
 	"ximan/global"
+	"ximan/xmevent"
 )
 
 /**
@@ -17,12 +17,12 @@ import (
  * @Version:
  */
 
-// @title:    	  BotReceiveMessageBase
-// @description:  接收CQHttp推送的消息
+// @title:    	  BotReceiveEventBase
+// @description:  接收CQHttp推送的事件
 // @auth:         liuzw3018
 // @param:        nil
 // @return:       nil
-func BotReceiveMessageBase(c *gin.Context) {
+func BotReceiveEventBase(c *gin.Context) {
 	var (
 		res    []byte
 		err    error
@@ -42,5 +42,5 @@ func BotReceiveMessageBase(c *gin.Context) {
 		return
 	}
 
-	cmd.MessageHandle(msg)
+	xmevent.EventHandle(msg)
 }

@@ -13,7 +13,7 @@ import (
  * @Version:
  */
 
-// 创建指令实例
+// 创建事件实例
 var ping = global.OnCommand{
 	ModuleName:  "ping",
 	Cmd:         "ping",
@@ -41,7 +41,7 @@ func init() {
 	newPing.Registered()
 }
 
-// ping指令执行函数
+// ping事件执行函数
 func CmdPing(sendInfo global.SendMessage) {
 	// 实例化消息发送对象
 	b := utils.BotSendMessage{AutoEscape: true}
@@ -49,7 +49,7 @@ func CmdPing(sendInfo global.SendMessage) {
 	b.Send(sendInfo, "send_msg")
 }
 
-// newPing指令执行函数
+// newPing事件执行函数
 func NewCmdPing(sendInfo global.SendMessage) {
 	//time.Sleep(10 * time.Second)
 	sendInfo.Message = "[CQ:face,id=14]pong"

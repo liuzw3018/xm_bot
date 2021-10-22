@@ -2,6 +2,7 @@ package utils
 
 import (
 	"log"
+	"time"
 	"ximan/global"
 	"ximan/xmlog"
 )
@@ -23,6 +24,7 @@ func ErrorLogMsg() {
 	for {
 		if v, ok := <-global.ErrorLogMsgChan; ok {
 			log.Println(v)
+			v = time.Now().Format("2006-01-02 15:04:05") + " [ERROR] " + v
 			err := xmlog.WriteLog("xmBotError.log", v)
 			if err != nil {
 				log.Println(err)
@@ -39,6 +41,7 @@ func ErrorLogMsg() {
 func XmInfoLog() {
 	for {
 		if v, ok := <-global.BotInfoLogMsgChan; ok {
+			v = time.Now().Format("2006-01-02 15:04:05") + " [INFO] " + v
 			err := xmlog.WriteLog("xmBotInfo.log", v)
 			if err != nil {
 				log.Println(err)
